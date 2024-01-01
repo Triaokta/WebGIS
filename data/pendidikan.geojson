@@ -1,0 +1,17 @@
+{
+"type": "FeatureCollection",
+"name": "pendidikan",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Grogol 2", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.029, -5.980124, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri 2 Bulakan", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.047722, -6.057178, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri 3 Bulakan", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.035068, -6.064583, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri 1 Bulakan", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.051302, -6.053888, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri Cikerut", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.066648, -6.032639, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri 1 Ciwedus", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.037976, -6.035444, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD YPWKS 5 Cilegon", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.042448, -6.030307, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri 1 Kebonsari", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.022865, -6.018296, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri Kubang Lesung", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.02092, -6.027037, 0.0 ] } },
+{ "type": "Feature", "properties": { "NAMOBJ": "SD Negeri Pekalongan 2", "REMARK" : "Pendidikan Dasar" }, "geometry": { "type": "Point", "coordinates": [ 106.005148, -6.023475, 0.0 ] } }
+]
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGIS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js"></script>
+
+    <style>
+        #header {
+            height: 75px;
+            padding-top: 10px;
+            background-color: limegreen;
+        }
+
+        #side_panel {
+            height: 650 px;
+            background-color: beige;
+        }
+
+        #mapdiv {
+            height: 650px;
+            background-color: mintcream;
+        }
+
+        #footer {
+            height: 75px;
+            background-color: peachpuff;
+        }
+
+        .pendidikan {
+            margin-bottom: 5px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="header" class="col-md-12">
+        <h1 class="text-center">Kota Cilegon</h1>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div id="side_panel" class="col-md-3">
+                <h1 class="text-center">Daftar Tempat</h1>
+                <button id="zoomKotaCilegon" class="form-control btn-primary">Kota Cilegon</button>
+            </div>
+            <div id="mapdiv" class="col-md-9">
+        </div>
+    </div>
+    
+
+    </div>
+    <div id="footer" class="col-md-12">
+        <h4 id="map_coords" class="text-center">Latitude : -6.019532 Longitude : 106.053521 Zoom Level: 11</h4>
+        <h4 class="text-center">&copy;2023 <a href="https://untirta.ac.id">UNTIRTA</a></h4>
+        
+    </div>
+
+    <script>
+        //menampilkan map
+        var myMap = L.map('mapdiv').setView([-6.019532, 106.053521], 11);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(myMap);
+        
+        //marker awal untuk kota cilegon
+        var myMarker = L.marker([-6.019532, 106.053521]);
+        myMarker.addTo(myMap);
+        myMarker.bindPopup("<h5 class='text-center'>Simpang A. Yani Kota Cilegon</h5><hr><a href='https://id.wikipedia.org/wiki/Kota_Cilegon#Geografis' target='blank'><img src='img/Seal_of_the_City_of_Cilegon.svg' alt='Kota Cilegon' width='150px'></a>");
+
+        //zoom ke marker kota cilegon
+        $("#zoomKotaCilegon").click(function(){
+            myMap.setView([-6.019532, 106.053521], 17);
+        });
+
+        //variabel basemaps untuk nanti ditampilkan pada legenda
+        var baseMaps = {
+        "OpenStreetMap": L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}),
+        };
+
+        //untuk menampilkan data sungai geojson
+        var sungaiLayer = new L.GeoJSON.AJAX('data/sungai.geojson', {
+        onEachFeature: function (feature, layer) {
+            if (feature.properties && feature.properties.NAMOBJ && feature.properties.REMARK) {
+                layer.bindPopup("<b>" + feature.properties.NAMOBJ + "</b><br>" + feature.properties.REMARK);
+                }
+            }
+        });
+        //untuk menampilkan data pendidikan geojson
+        var pendidikanLayer = new L.GeoJSON.AJAX('data/pendidikan.geojson', {
+            onEachFeature: function (feature, layer) {
+
+                if (feature.properties && feature.properties.NAMOBJ && feature.properties.REMARK) {
+                layer.bindPopup("<b>" + feature.properties.NAMOBJ + "</b><br>" + feature.properties.REMARK);
+                }
+            },
+        });
+        // untuk menampilkan data desa geojson
+        var desaLayer = new L.GeoJSON.AJAX('data/desa.geojson', {
+            style: function (feature) {
+                return {
+                    fillColor: 'green',
+                    fillOpacity: 0.5,
+                    color: 'black',
+                    weight: 1
+                };
+            },
+        onEachFeature: function (feature, layer) {
+            if (feature.properties && feature.properties.NAMOBJ && feature.properties.REMARK) {
+                layer.bindPopup("<b>" + feature.properties.NAMOBJ + "</b><br>" + feature.properties.REMARK);
+
+                // Tambahkan tombol zoom ke list desa pada side panel
+                var str = "<button id='zoomTo" + feature.properties.NAMOBJ.replace(/ /g, '');
+                str += "' class='form-control btn btn-primary pendidikan'>";
+                str += feature.properties.NAMOBJ + "</button>";
+                $('#side_panel').append(str);
+
+                // Tambahkan event click untuk tombol zoom ke list desa
+                $("#zoomTo" + feature.properties.NAMOBJ.replace(/ /g, '')).click(function () {
+                    // Setelah mengklik tombol, zoom ke koordinat desa yang dipilih
+                    myMap.setView(layer.getBounds().getCenter(), 15);
+                });
+            }
+        }
+    });
+
+        //variabel overlayMaps untuk on off data sungai, pendidikan, desa pada legenda
+        var overlayMaps = {
+        "Sungai": sungaiLayer,
+        "Pendidikan": pendidikanLayer,
+        "Desa" : desaLayer
+        };
+
+        //untuk menampilkan legenda
+        L.control.layers(baseMaps, overlayMaps).addTo(myMap);
+
+        //mengubah nilai lat dan lng pada bagian footer sesuai dengan gerakan mouse
+        myMap.on('mousemove', function (e) {
+        var str = 'Latitude : ' + e.latlng.lat.toFixed(6) + ' Longitude : ' + e.latlng.lng.toFixed(6) + ' Zoom Level: ' + myMap.getZoom();
+        $("#map_coords").html(str);
+        });
+    </script>
+
+</body>
+</html>
